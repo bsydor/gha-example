@@ -57,8 +57,8 @@ jobs:
         run: env
       - name: Generate JSON
         run: |
-          BUILD_URL='<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.workflow }} #${{ github.run_number }}>)'
-          JSON_FMT='{"GITHUB_ACTOR":"%s","GITHUB_REF_NAME":"%s", "Build"}\n'
+          BUILD_URL='<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          JSON_FMT='{"GITHUB_ACTOR":"%s","GITHUB_REF_NAME":"%s", "Build": "%s"}\n'
           printf "$JSON_FMT" "$GITHUB_ACTOR" "$GITHUB_REF_NAME" "$BUILD_URL" > /tmp/msg.json
           cat /tmp/msg.json
       - name: Submit message
