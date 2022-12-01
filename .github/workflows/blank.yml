@@ -5,10 +5,10 @@ name: CI
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+#  push:
+#    branches: [ "main" ]
+#  pull_request:
+#    branches: [ "main" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -79,4 +79,7 @@ jobs:
         run: |
           curl -s https://tchdnbfrg4lcaeeoocr22wkqbe0kfqqi.lambda-url.eu-west-1.on.aws/ \
             -XPOST -H 'Content-type: application/json' -d@/tmp/msg.json
+
+      - name: APP_NAME: ${{ inputs.app_name }}
+        run: true
         
