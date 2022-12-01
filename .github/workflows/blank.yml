@@ -13,12 +13,14 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
-      name:
+      app_name:
         type: choice
-        description: Who to greet
+        description: Select app name
         options:
-        - monalisa
-        - cschleiden
+        - app1
+        - app2
+        - app3
+        default: app1
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -44,6 +46,8 @@ jobs:
   test:
     # The type of runner that the job will run on
     runs-on: [ self-hosted, b ]
+    env:
+      APP_NAME: ${{ inputs.app_name }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -62,16 +66,14 @@ jobs:
           
       - name: Show env vars
         run: env
-        env:
-          GH_NAME: ${{ inputs.name }}
+        
       - name: Generate JSON
         run: |
           BUILD_URL='<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
-          JSON_FMT='{"GITHUB_ACTOR":"%s","GITHUB_REF_NAME":"%s", "Build": "%s", "GH_NAME": "%s" }\n'
-          printf "$JSON_FMT" "$GITHUB_ACTOR" "$GITHUB_REF_NAME" "$BUILD_URL" "GH_NAME" > /tmp/msg.json
+          JSON_FMT='{"GITHUB_ACTOR":"%s","GITHUB_REF_NAME":"%s", "Build": "%s", "APP_NAME": "%s" }\n'
+          printf "$JSON_FMT" "$GITHUB_ACTOR" "$GITHUB_REF_NAME" "$BUILD_URL" "$APP_NAME" > /tmp/msg.json
           cat /tmp/msg.json
-        env:
-          GH_NAME: ${{ inputs.name }}
+
       - name: Submit message
         run: |
           curl -s https://tchdnbfrg4lcaeeoocr22wkqbe0kfqqi.lambda-url.eu-west-1.on.aws/ \
