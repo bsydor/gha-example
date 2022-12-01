@@ -64,15 +64,24 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-          
-      - name: Show env vars
-        run: env
+
+      - name: Run test 1
+        run: echo "TEST_ONE=success" >> TEST_RESULTS
+        
+      - name: Run test 2
+        run: echo "TEST_TWO=success" >> TEST_RESULTS
+        
+ #     - name: Show env vars
+ #       run: env
+      - name: Check test results
+        run: |
+          grep -vq success TEST_RESULTS && echo "TEST_RESULTS=success" >> $GITHUB_ENV || echo  "TEST_RESULTS=failure" >> $GITHUB_ENV
         
       - name: Generate JSON
         run: |
           BUILD_URL='<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
-          JSON_FMT='{"GITHUB_ACTOR":"%s","GITHUB_REF_NAME":"%s", "Build": "%s", "APP_NAME": "%s" }\n'
-          printf "$JSON_FMT" "$GITHUB_ACTOR" "$GITHUB_REF_NAME" "$BUILD_URL" "$APP_NAME" > /tmp/msg.json
+          JSON_FMT='{"GITHUB_ACTOR":"%s","GITHUB_REF_NAME":"%s", "BUILD_URL": "%s", "APP_NAME": "%s", "TEST_RESULTS": "%s" }\n'
+          printf "$JSON_FMT" "$GITHUB_ACTOR" "$GITHUB_REF_NAME" "$BUILD_URL" "$APP_NAME" "$TEST_RESULTS" > /tmp/msg.json
           cat /tmp/msg.json
 
       - name: Submit message
