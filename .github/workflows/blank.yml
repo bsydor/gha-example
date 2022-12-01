@@ -59,6 +59,6 @@ jobs:
         run: |
           JSON_FMT='{"GITHUB_ACTOR":"%s","GITHUB_REF_NAME":"%s"}\n'
           printf "$JSON_FMT" "$GITHUB_ACTOR" "$GITHUB_REF_NAME" > /tmp/msg.json
-      - name: Submit message
-        run: curl -s https://tchdnbfrg4lcaeeoocr22wkqbe0kfqqi.lambda-url.eu-west-1.on.aws/ -XPOST -H 'Content-type: application/json' -d@/tmp/msg.json
+#      - name: Submit message
+#        run: curl -s https://tchdnbfrg4lcaeeoocr22wkqbe0kfqqi.lambda-url.eu-west-1.on.aws/ -XPOST -H 'Content-type: application/json' -d@/tmp/msg.json
         
