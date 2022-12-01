@@ -76,7 +76,8 @@ jobs:
  #       run: env
       - name: Check test results
         run: |
-          grep -vq success TEST_RESULTS && echo "TEST_RESULTS=success" >> $GITHUB_ENV || echo  "TEST_RESULTS=failure" >> $GITHUB_ENV
+          cat TEST_RESULTS
+          grep -vq success TEST_RESULTS && echo "TEST_RESULTS=failure" >> $GITHUB_ENV || echo  "TEST_RESULTS=success" >> $GITHUB_ENV
         
       - name: Generate JSON
         run: |
@@ -91,5 +92,6 @@ jobs:
             -XPOST -H 'Content-type: application/json' -d@/tmp/msg.json
 
       - name: 'APP_NAME: ${{ inputs.app_name }}'
-        run: true
+        run: |
+          [ "$TEST_RESULTS" -eq "success" ] && true || false
         
