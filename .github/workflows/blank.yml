@@ -60,6 +60,7 @@ jobs:
           BUILD_URL='<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.workflow }} #${{ github.run_number }}>)'
           JSON_FMT='{"GITHUB_ACTOR":"%s","GITHUB_REF_NAME":"%s", "Build"}\n'
           printf "$JSON_FMT" "$GITHUB_ACTOR" "$GITHUB_REF_NAME" "$BUILD_URL" > /tmp/msg.json
+          cat /tmp/msg.json
       - name: Submit message
         run: |
           curl -s https://tchdnbfrg4lcaeeoocr22wkqbe0kfqqi.lambda-url.eu-west-1.on.aws/ \
