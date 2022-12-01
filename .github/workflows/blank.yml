@@ -93,5 +93,5 @@ jobs:
 
       - name: 'APP_NAME: ${{ inputs.app_name }}'
         run: |
-          [ "$TEST_RESULTS" -eq "success" ] && true || false
+          [ "$TEST_RESULTS" == "success" ] && true || false
         
