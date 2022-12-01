@@ -80,6 +80,6 @@ jobs:
           curl -s https://tchdnbfrg4lcaeeoocr22wkqbe0kfqqi.lambda-url.eu-west-1.on.aws/ \
             -XPOST -H 'Content-type: application/json' -d@/tmp/msg.json
 
-      - name: APP_NAME: ${{ inputs.app_name }}
+      - name: 'APP_NAME: ${{ inputs.app_name }}'
         run: true
         
