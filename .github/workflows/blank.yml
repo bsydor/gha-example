@@ -62,12 +62,16 @@ jobs:
           
       - name: Show env vars
         run: env
+        env:
+          GH_NAME: ${{ inputs.name }}
       - name: Generate JSON
         run: |
           BUILD_URL='<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
-          JSON_FMT='{"GITHUB_ACTOR":"%s","GITHUB_REF_NAME":"%s", "Build": "%s"}\n'
-          printf "$JSON_FMT" "$GITHUB_ACTOR" "$GITHUB_REF_NAME" "$BUILD_URL" > /tmp/msg.json
+          JSON_FMT='{"GITHUB_ACTOR":"%s","GITHUB_REF_NAME":"%s", "Build": "%s", "GH_NAME": "%s" }\n'
+          printf "$JSON_FMT" "$GITHUB_ACTOR" "$GITHUB_REF_NAME" "$BUILD_URL" "GH_NAME" > /tmp/msg.json
           cat /tmp/msg.json
+        env:
+          GH_NAME: ${{ inputs.name }}
       - name: Submit message
         run: |
           curl -s https://tchdnbfrg4lcaeeoocr22wkqbe0kfqqi.lambda-url.eu-west-1.on.aws/ \
