@@ -81,7 +81,7 @@ jobs:
         
       - name: Generate JSON
         run: |
-          BUILD_URL='<https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          BUILD_URL='https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
           JSON_FMT='{"GITHUB_ACTOR":"%s","GITHUB_REF_NAME":"%s", "BUILD_URL": "%s", "APP_NAME": "%s", "TEST_RESULTS": "%s" }\n'
           printf "$JSON_FMT" "$GITHUB_ACTOR" "$GITHUB_REF_NAME" "$BUILD_URL" "$APP_NAME" "$TEST_RESULTS" > /tmp/msg.json
           cat /tmp/msg.json
