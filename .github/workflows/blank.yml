@@ -72,8 +72,9 @@ jobs:
       - name: Run test 2
         run: echo "TEST_TWO=success" >> TEST_RESULTS
         
- #     - name: Show env vars
- #       run: env
+      - name: Show env vars
+        run: env
+        
       - name: Check test results
         run: |
           cat TEST_RESULTS
