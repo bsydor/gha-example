@@ -44,7 +44,7 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-          echo Conclusion: ${{ github.event.conclusion }}
+          echo Conclusion: ${{ job.status }}
   
   test:
     # The type of runner that the job will run on
@@ -87,7 +87,7 @@ jobs:
           JSON_FMT='{"GITHUB_ACTOR":"%s","GITHUB_REF_NAME":"%s", "BUILD_URL": "%s", "APP_NAME": "%s", "TEST_RESULTS": "%s" }\n'
           printf "$JSON_FMT" "$GITHUB_ACTOR" "$GITHUB_REF_NAME" "$BUILD_URL" "$APP_NAME" "$TEST_RESULTS" > /tmp/msg.json
           cat /tmp/msg.json
-          echo Conclusion: ${{ github.event.conclusion }}
+          echo Conclusion: ${{ job.status }}
 
       - name: Submit message
         run: |
@@ -96,6 +96,6 @@ jobs:
 
       - name: 'APP_NAME: ${{ inputs.app_name }}'
         run: |
-          echo Conclusion: ${{ github.event.conclusion }}
+          echo Conclusion: ${{ job.status }}
           [ "$TEST_RESULTS" == "success" ] && true || false
         
