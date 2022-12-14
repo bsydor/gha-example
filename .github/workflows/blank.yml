@@ -56,9 +56,9 @@ jobs:
           ls env:
           $app_name = '${{ inputs.app_name }}'
           $template = @'
-          Hello <%= $env:GITHUB_ACTOR =>!
-          Current branch name is: <%= $env:GITHUB_REF =>
-          App name: <%= $app_name =>
+          Hello <%= $env:GITHUB_ACTOR %>!
+          Current branch name is: <%= $env:GITHUB_REF %>
+          App name: <%= $app_name %>
           '@
           $rendered = Invoke-EpsTemplate -Template $template
           echo $rendered
