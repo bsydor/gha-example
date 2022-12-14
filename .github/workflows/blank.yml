@@ -53,7 +53,7 @@ jobs:
           #Get-Module
       - name: Render and send notification
         run: |
-          $app_name = ${{ inputs.app_name }}
+          $app_name = '${{ inputs.app_name }}'
           $template = @'
           Hello <%= $env:GITHUB_ACTOR =>!
           Current branch name is: <%= $env:GITHUB_REF =>
