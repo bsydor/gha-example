@@ -50,59 +50,70 @@ jobs:
           Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope CurrentUser
           Install-Module -Name EPS -Scope CurrentUser -Force
           Import-Module EPS
-          Get-Module
-          
+          #Get-Module
+      - name: Render and send notification
+        run: |
+          $template = @'
+          Hello <%= $GITHUB_ACTOR =>!
+          Current branch name is: <%= $GITHUB_REF =>
+          '@
+          $message = Invoke-EpsTemplate -Template $template
+          echo $message
+          $bytes = [System.Text.Encoding]::UTF8.GetBytes($message)
+          $encoded = [System.Convert]::ToBase64String($bytes)
+          echo $encoded
   
-  test:
-    # The type of runner that the job will run on
-    runs-on: [ self-hosted, b ]
-    env:
-      APP_NAME: ${{ inputs.app_name }}
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
-
-      - name: Run test 1
-        run: echo "TEST_ONE=success" >> TEST_RESULTS
-        
-      - name: Run test 2
-        run: echo "TEST_TWO=success" >> TEST_RESULTS
-        
-      - name: Show env vars
-        run: env
-        
-      - name: Check test results
-        run: |
-          cat TEST_RESULTS
-          grep -vq success TEST_RESULTS && echo "TEST_RESULTS=failure" >> $GITHUB_ENV || echo  "TEST_RESULTS=success" >> $GITHUB_ENV
-        
-      - name: Generate JSON
-        run: |
-          BUILD_URL='https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
-          JSON_FMT='{"GITHUB_ACTOR":"%s","GITHUB_REF_NAME":"%s", "BUILD_URL": "%s", "APP_NAME": "%s", "TEST_RESULTS": "%s" }\n'
-          printf "$JSON_FMT" "$GITHUB_ACTOR" "$GITHUB_REF_NAME" "$BUILD_URL" "$APP_NAME" "$TEST_RESULTS" > /tmp/msg.json
-          cat /tmp/msg.json
-          echo Conclusion: ${{ job.status }}
-
-      - name: Submit message
-        run: |
-          curl -s https://tchdnbfrg4lcaeeoocr22wkqbe0kfqqi.lambda-url.eu-west-1.on.aws/ \
-            -XPOST -H 'Content-type: application/json' -d@/tmp/msg.json
-
-      - name: 'APP_NAME: ${{ inputs.app_name }}'
-        run: |
-          echo Conclusion: ${{ job.status }}
-          [ "$TEST_RESULTS" == "success" ] && true || false
-        
+ # test:
+ #   # The type of runner that the job will run on
+ #   runs-on: [ self-hosted, b ]
+ #   env:
+ #     APP_NAME: ${{ inputs.app_name }}
+ #
+ #   # Steps represent a sequence of tasks that will be executed as part of the job
+ #   steps:
+ #     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+ #     - uses: actions/checkout@v3
+ #
+ #     # Runs a single command using the runners shell
+ #     - name: Run a one-line script
+ #       run: echo Hello, world!
+ #
+ #     # Runs a set of commands using the runners shell
+ #    - name: Run a multi-line script
+ #       run: |
+ #         echo Add other actions to build,
+ #         echo test, and deploy your project.
+ #
+ #     - name: Run test 1
+ #       run: echo "TEST_ONE=success" >> TEST_RESULTS
+ #       
+ #     - name: Run test 2
+ #       run: echo "TEST_TWO=success" >> TEST_RESULTS
+ #       
+ #     - name: Show env vars
+ #       run: env
+ #       
+ #     - name: Check test results
+ #       run: |
+ #         cat TEST_RESULTS
+ #         grep -vq success TEST_RESULTS && echo "TEST_RESULTS=failure" >> $GITHUB_ENV || echo  "TEST_RESULTS=success" >> $GITHUB_ENV
+ #       
+ #     - name: Generate JSON
+ #       run: |
+ #         BUILD_URL='https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+ #         JSON_FMT='{"GITHUB_ACTOR":"%s","GITHUB_REF_NAME":"%s", "BUILD_URL": "%s", "APP_NAME": "%s", "TEST_RESULTS": "%s" }\n'
+ #         printf "$JSON_FMT" "$GITHUB_ACTOR" "$GITHUB_REF_NAME" "$BUILD_URL" "$APP_NAME" "$TEST_RESULTS" > /tmp/msg.json
+ #         cat /tmp/msg.json
+ #         echo Conclusion: ${{ job.status }}
+ #
+ #     - name: Submit message
+ #       run: |
+ #         curl -s https://tchdnbfrg4lcaeeoocr22wkqbe0kfqqi.lambda-url.eu-west-1.on.aws/ \
+ #           -XPOST -H 'Content-type: application/json' -d@/tmp/msg.json
+ #
+ #     - name: 'APP_NAME: ${{ inputs.app_name }}'
+ #       run: |
+ #         echo Conclusion: ${{ job.status }}
+ #         [ "$TEST_RESULTS" == "success" ] && true || false
+ #       
+ #
