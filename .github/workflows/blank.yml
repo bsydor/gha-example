@@ -57,11 +57,23 @@ jobs:
           Hello <%= $env:GITHUB_ACTOR =>!
           Current branch name is: <%= $env:GITHUB_REF =>
           '@
-          $message = Invoke-EpsTemplate -Template $template
-          echo $message
-          $bytes = [System.Text.Encoding]::UTF8.GetBytes($message)
-          $encoded = [System.Convert]::ToBase64String($bytes)
-          echo $encoded
+          $rendered = Invoke-EpsTemplate -Template $template
+          $bytes = [System.Text.Encoding]::UTF8.GetBytes($rendered)
+          $message = [System.Convert]::ToBase64String($bytes)
+          $email_from = 'bsydor@gmail.com'
+          $recipients = @(
+            'bsydor@gmail.com'
+            'bsydor@icloud.com'
+          )
+          $subject = 'Test SES'
+          $payload = @{
+            'email_from' = $email_from
+            'recipients' = $recipients
+            'subject' = $subject
+            'message' = $message
+          } | ConvertTo-Json
+          $uri = 'https://tchdnbfrg4lcaeeoocr22wkqbe0kfqqi.lambda-url.eu-west-1.on.aws/'
+          Invoke-WebRequest -Uri $uri -Method POST -Content-Type "application/json" -Body $payload
   
  # test:
  #   # The type of runner that the job will run on
