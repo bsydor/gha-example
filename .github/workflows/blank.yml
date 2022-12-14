@@ -45,6 +45,13 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
           echo Conclusion: ${{ job.status }}
+      - name: Set up EPS
+        run: |
+          Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope CurrentUser
+          Install-Module -Name EPS -Scope CurrentUser -Force
+          Import-Module EPS
+          Get-Module
+          
   
   test:
     # The type of runner that the job will run on
