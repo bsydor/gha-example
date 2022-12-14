@@ -54,8 +54,8 @@ jobs:
       - name: Render and send notification
         run: |
           $template = @'
-          Hello <%= $GITHUB_ACTOR =>!
-          Current branch name is: <%= $GITHUB_REF =>
+          Hello <%= $env:GITHUB_ACTOR =>!
+          Current branch name is: <%= $env:GITHUB_REF =>
           '@
           $message = Invoke-EpsTemplate -Template $template
           echo $message
