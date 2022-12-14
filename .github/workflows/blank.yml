@@ -73,7 +73,7 @@ jobs:
             'message' = $message
           } | ConvertTo-Json
           $uri = 'https://tchdnbfrg4lcaeeoocr22wkqbe0kfqqi.lambda-url.eu-west-1.on.aws/'
-          Invoke-WebRequest -Uri $uri -Method POST -Content-Type "application/json" -Body $payload
+          Invoke-RestMethod -Uri $uri -Method POST -Content-Type "application/json" -Body $payload
   
  # test:
  #   # The type of runner that the job will run on
