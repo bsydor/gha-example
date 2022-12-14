@@ -53,9 +53,11 @@ jobs:
           #Get-Module
       - name: Render and send notification
         run: |
+          $app_name = ${{ inputs.app_name }}
           $template = @'
           Hello <%= $env:GITHUB_ACTOR =>!
           Current branch name is: <%= $env:GITHUB_REF =>
+          App name: <%= $app_name =>
           '@
           $rendered = Invoke-EpsTemplate -Template $template
           $bytes = [System.Text.Encoding]::UTF8.GetBytes($rendered)
@@ -72,7 +74,7 @@ jobs:
             'subject' = $subject
             'message' = $message
           } | ConvertTo-Json
-          $uri = 'https://tchdnbfrg4lcaeeoocr22wkqbe0kfqqi.lambda-url.eu-west-1.on.aws/'
+          $uri = 'https://amin3obgfznkn6gjhv2uc2zu3i0imbhq.lambda-url.eu-west-1.on.aws/'
           Invoke-RestMethod -Uri $uri -Method POST -ContentType "application/json" -Body $payload
   
  # test:
