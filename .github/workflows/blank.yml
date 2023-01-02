@@ -48,6 +48,7 @@ jobs:
       - name: Set up EPS
         run: |
           Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope CurrentUser
+          #Install-Module -Name EPS -Scope CurrentUser -Force
           Install-Module -Name EPS -Scope CurrentUser -Force
           Import-Module EPS
           #Get-Module
